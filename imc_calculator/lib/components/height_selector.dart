@@ -3,8 +3,8 @@ import 'package:imc_calculator/core/app_colors.dart';
 import 'package:imc_calculator/core/text_styles.dart';
 
 class HeightSelector extends StatefulWidget {
-  final int selectedHeight;
-  final Function(int) onHeightChanged;
+  final double selectedHeight;
+  final Function(double) onHeightChanged;
   const HeightSelector({super.key, required this.selectedHeight, required this.onHeightChanged});
 
   @override
@@ -37,7 +37,7 @@ class _HeightSelectorState extends State<HeightSelector> {
               activeColor: AppColors.primary,
               onChanged: (value) {
                 setState(() {
-                  widget.onHeightChanged(value.toInt());
+                  widget.onHeightChanged(value);
                 });
               },
             ),
