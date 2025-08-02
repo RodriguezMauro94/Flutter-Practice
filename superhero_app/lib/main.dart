@@ -10,6 +10,8 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SuperheroSearchScreen();
+    return const MaterialApp(
+      home: SuperheroSearchScreen()
+    );
   }
 }
