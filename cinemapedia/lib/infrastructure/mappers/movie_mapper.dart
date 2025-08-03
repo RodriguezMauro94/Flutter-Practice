@@ -4,7 +4,7 @@ import 'package:cinemapedia/infrastructure/model/moviedb/movie_moviedb.dart';
 class MovieMapper {
   static Movie movieDbToEntity(MovieMovieDB moviedb) => Movie(
         adult: moviedb.adult,
-        backdropPath: moviedb.backdropPath != '' ? "https://image.tmdb.org/t/p/w500${moviedb.backdropPath}" : 'https://pds.exblog.jp/pds/1/201712/21/39/f0323239_18023139.png',
+        backdropPath: moviedb.backdropPath != '' ? "https://image.tmdb.org/t/p/w500${moviedb.backdropPath}" : 'https://sd.keepcalms.com/i-w600/keep-calm-poster-not-found.jpg',
         genreIds: moviedb.genreIds.map((e) => e.toString()).toList(),
         id: moviedb.id,
         originalLanguage: moviedb.originalLanguage,
