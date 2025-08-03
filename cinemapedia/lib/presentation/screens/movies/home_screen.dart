@@ -37,14 +37,48 @@ class __HomeViewState extends ConsumerState<_HomeView> {
     final slideshowMovies = ref.watch(moviesSlideshowProvider);
     final nowPlayingMovies = ref.watch(nowPlayingMoviesProvider);
 
-    return Column(
-      children: [
-        CustomAppbar(),
-        MoviesSlideshow(movies: slideshowMovies),
-        MoviesHorizontalListview(
-          movies: nowPlayingMovies,
-          title: "En cines",
-          subtitle: "Lunes 4",
+    return CustomScrollView(
+      slivers: [
+        SliverAppBar(
+          floating: true,
+          flexibleSpace: FlexibleSpaceBar(title: CustomAppbar()),
+        ),
+
+        SliverList(
+          delegate: SliverChildBuilderDelegate((context, index) {
+            return Column(
+              children: [
+                MoviesSlideshow(movies: slideshowMovies),
+                MoviesHorizontalListview(
+                  movies: nowPlayingMovies,
+                  title: "En cines",
+                  subtitle: "Lunes 4",
+                  loadNextPage: () {
+                    ref.read(nowPlayingMoviesProvider.notifier).loadNextPage();
+                  },
+                ),
+
+                MoviesHorizontalListview(
+                  movies: nowPlayingMovies,
+                  title: "Populares",
+                  loadNextPage: () {
+                    ref.read(nowPlayingMoviesProvider.notifier).loadNextPage();
+                  },
+                ),
+
+                MoviesHorizontalListview(
+                  movies: nowPlayingMovies,
+                  title: "Mejores calificadas",
+                  subtitle: "Desde siempre",
+                  loadNextPage: () {
+                    ref.read(nowPlayingMoviesProvider.notifier).loadNextPage();
+                  },
+                ),
+
+                SizedBox(height: 10),
+              ],
+            );
+          }, childCount: 1),
         ),
       ],
     );

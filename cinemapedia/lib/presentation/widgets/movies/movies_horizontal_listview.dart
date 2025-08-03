@@ -3,7 +3,7 @@ import 'package:cinemapedia/config/helpers/human_format.dart';
 import 'package:cinemapedia/domain/entities/movie.dart';
 import 'package:flutter/material.dart';
 
-class MoviesHorizontalListview extends StatelessWidget {
+class MoviesHorizontalListview extends StatefulWidget {
   final List<Movie> movies;
   final String? title;
   final String? subtitle;
@@ -18,21 +18,49 @@ class MoviesHorizontalListview extends StatelessWidget {
   });
 
   @override
+  State<MoviesHorizontalListview> createState() =>
+      _MoviesHorizontalListviewState();
+}
+
+class _MoviesHorizontalListviewState extends State<MoviesHorizontalListview> {
+  final scrollController = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+    scrollController.addListener(() {
+      if (widget.loadNextPage == null) return;
+
+      if (scrollController.position.pixels + 200 >
+          scrollController.position.maxScrollExtent) {
+        widget.loadNextPage!();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    scrollController.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return SizedBox(
       height: 350,
       child: Column(
         children: [
-          if (title != null || subtitle != null)
-            _Title(title: title, subtitle: subtitle),
+          if (widget.title != null || widget.subtitle != null)
+            _Title(title: widget.title, subtitle: widget.subtitle),
 
           Expanded(
             child: ListView.builder(
-              itemCount: movies.length,
+              controller: scrollController,
+              itemCount: widget.movies.length,
               scrollDirection: Axis.horizontal,
               physics: const BouncingScrollPhysics(),
               itemBuilder: (context, index) {
-                return _Slide(movie: movies[index]);
+                return _Slide(movie: widget.movies[index]);
               },
             ),
           ),
@@ -86,6 +114,7 @@ class _Slide extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SizedBox(
+            height: 225,
             width: 150,
             child: ClipRRect(
               borderRadius: BorderRadiusGeometry.circular(20),
@@ -111,6 +140,7 @@ class _Slide extends StatelessWidget {
 
           SizedBox(
             width: 150,
+            height: 40,
             child: Text(movie.title, maxLines: 2, style: textTheme.titleSmall),
           ),
 
@@ -121,7 +151,7 @@ class _Slide extends StatelessWidget {
                 Icon(Icons.star_half_outlined, color: Colors.yellow.shade800),
                 const SizedBox(width: 3),
                 Text(
-                  movie.voteAverage.toString(),
+                  movie.voteAverage.toStringAsFixed(2),
                   style: textTheme.bodyMedium?.copyWith(
                     color: Colors.yellow.shade800,
                   ),
