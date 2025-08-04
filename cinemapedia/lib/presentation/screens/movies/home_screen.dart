@@ -43,6 +43,8 @@ class __HomeViewState extends ConsumerState<_HomeView> {
     final upcomingMovies = ref.watch(upcomingMoviesProvider);
     final topRatedMovies = ref.watch(topRatedMoviesProvider);
 
+    return FullScreenLoader();
+
     return CustomScrollView(
       slivers: [
         SliverAppBar(
@@ -67,7 +69,6 @@ class __HomeViewState extends ConsumerState<_HomeView> {
                 MoviesHorizontalListview(
                   movies: upcomingMovies,
                   title: "Próximamente",
-                  subtitle: "Desde siempre",
                   loadNextPage: () {
                     ref.read(upcomingMoviesProvider.notifier).loadNextPage();
                   },
