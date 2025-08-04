@@ -22,13 +22,23 @@ class MoviedbDatasourceImpl extends MoviesDatasource {
       "/movie/now_playing",
       queryParameters: {"page": page},
     );
-    final movieDbResponse = MovieDbResponse.fromJson(response.data);
+    return jsonToMovies(response.data);
+  }
 
-    final List<Movie> listMovies = movieDbResponse.results
+  @override
+  Future<List<Movie>> getPopular({int page = 1}) async {
+    final response = await dio.get(
+      "/movie/popular",
+      queryParameters: {"page": page},
+    );
+    return jsonToMovies(response.data);
+  }
+
+  List<Movie> jsonToMovies(Map<String, dynamic> json) {
+    final movieDbResponse = MovieDbResponse.fromJson(json);
+    return movieDbResponse.results
         .where((moviedb) => moviedb.posterPath != "no-poster")
         .map((moviedb) => MovieMapper.movieDbToEntity(moviedb))
         .toList();
-
-    return listMovies;
   }
 }
